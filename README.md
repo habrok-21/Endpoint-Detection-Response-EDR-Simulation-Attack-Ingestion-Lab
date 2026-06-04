@@ -6,21 +6,6 @@ This home lab project demonstrates the implementation of defensive logging infra
 * **Target Environment IP :** 192.168.64.13 (Windows Workstation running Sysmon & Splunk Enterprise)
 * **Attacker Infrastructure IP :** 192.168.64.6 (Kali Linux Security Testing Platform)
 
-       [ Kali Linux VM ]                    [ Windows 11 VM (UTM) ]
-+------------------------------+     +------------------------------------+
-|                              |     |                                    |
-|       Attacker Machine       |     |  1. Your Actions                   |
-|                              |     |     (Attacked by Kali via network) |
-|      Launches exploits       |---->|                    |               |
-|       or scans network       |     |                    v               |
-|                              |     |  2. Sysmon                         |
-|                              |     |     Generates detailed defense logs|
-|                              |     |                    |               |
-|                              |     |                    v               |
-|                              |     |  3. Splunk Enterprise              |
-|                              |     |     Collects, stores, & searches   |
-+------------------------------+     +------------------------------------+
-
 ---
 
 ## Phase 1 ~ Installation & Configuration
