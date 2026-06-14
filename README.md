@@ -32,8 +32,8 @@ cd C \Sysmon
 3) Step 3 : Verify
 • Open Event Viewer -> Applications and Services Logs -> Microsoft -> Windows -> Sysmon -> Operational.
 
-![Sysmon Installation](sysmon_installation.png)
-![Verify Sysmon Installation](verify_sysmon_instalation.png)
+![Sysmon Installation](Screenshots/sysmon_installation.png)
+![Verify Sysmon Installation](Screenshots/verify_sysmon_instalation.png)
 
 ### 2. Splunk Enterprise
 The heavy duty SIEM software engine. Which ingests raw log files, breaks them down into searchable fields, lets you run complex queries, and builds dashboards.
